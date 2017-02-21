@@ -1,0 +1,21 @@
+{
+  "name": "maciejmrozinski/reactphp-varnish-esi-booster",
+  "description": "Varnish Esi Booster is an asynchronous, PSR-7 compatible middleware using ReactPHP",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Maciej Mroziński",
+      "email": "maciej.k.mrozinski@gmail.com"
+    }
+  ],
+  "require": {
+    "psr/http-message": "~1.0",
+    "react/http-client": "~0.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "MM\\React\\Varnish\\": "src/"
+    }
+  }
+}
