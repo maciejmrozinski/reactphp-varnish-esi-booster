@@ -1,21 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Maciej Mroziński <maciej.k.mrozinski@gmail.com>
- * Date: 21.02.17
- * Time: 11:11
- */
 
 namespace MM\React\Varnish;
 
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Dns\Resolver\Factory as DnsFactory;
 use React\EventLoop\LoopInterface;
 use React\HttpClient\Client;
 use React\HttpClient\Factory as HttpFactory;
+use Zend\Stratigility\Delegate\CallableDelegateDecorator;
 
-class Booster
+class Booster implements MiddlewareInterface
 {
     /**
      * @var string
@@ -66,8 +63,21 @@ class Booster
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        /** @var ResponseInterface $response */
-        $response = $next($request, $response);
+        return $this->process($request, new CallableDelegateDecorator($next, $response));
+    }
+
+    /**
+     * Process an incoming server request and return a response, optionally delegating
+     * to the next middleware component to create the response.
+     *
+     * @param ServerRequestInterface $request
+     * @param DelegateInterface $delegate
+     *
+     * @return ResponseInterface
+     */
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    {
+        $response = $delegate->process($request);
         if ($this->varnishHost) {
             $response->getBody()->rewind();
             $matches = [];

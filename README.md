@@ -1,23 +1,19 @@
 # reactphp-varnish-esi-booster
-Varnish Esi Booster is an asynchronous, PSR-7 compatible middleware using ReactPHP
+Varnish Esi Booster is an asynchronous, PSR-7 and PSR-15 compatible middleware using ReactPHP.
 
 It will prefetch all Your Esi blocks found in response body. This will speed up Esi blocks processing. Normally Varnish will process Your Esi blocks one by one, synchronously.
 
-###Usage (using Relay)
-```
-$booster = new MM\React\Varnish\Booster($loop, '127.0.0.1', '80');
+### Usage
 
-$relayBuilder = new Relay\RelayBuilder();
+You can find example usage of this library in `examples` directory. There are three examples:
 
-$relay = $relayBuilder->newInstance([
-    $booster
-]);
+- Simple usage
+- with Relay library (https://github.com/relayphp/Relay.Relay)
+- with Zend Stratigility library (https://github.com/zendframework/zend-stratigility)
 
-$relay->run($psr7Request, $psr7Response);
+To test examples You need to install dev requirements with composer.
 
-```
-
-###Esi blocks format
+### Esi blocks format
 Booster will look for Esi blocks defined as follow:
 ```
 <esi:include src="URL"/>
